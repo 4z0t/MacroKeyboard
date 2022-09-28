@@ -1,7 +1,13 @@
-
-
+#define USE_IMAGES 1
+//removes adafruit splash for memory optimization
+#define SSD1306_NO_SPLASH 
 #include "Profile.h"
+#if USE_IMAGES
 #include "images.h"
+#define IMAGE_(image) image
+#else
+#define IMAGE_(image) nullptr
+#endif
 #include <Adafruit_SSD1306.h>
 #include <Keyboard.h>
 #include <Keypad.h>
@@ -17,14 +23,14 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define ROWS 3
 #define COLS 3
 
-const char  keys[ROWS][COLS] = {
+const char keys[ROWS][COLS] = {
     {'7', '8', '9'},
     {'4', '5', '6'},
     {'1', '2', '3'},
 };
 
-const byte  rowPins[ROWS] = {6, 5, 4};
-const byte  colPins[COLS] = {9, 8, 7};
+const byte rowPins[ROWS] = {6, 5, 4};
+const byte colPins[COLS] = {9, 8, 7};
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void GitFunc(char key)
@@ -72,9 +78,9 @@ void GitFunc(char key)
 
 const byte TOTAL_PROFILES = 3;
 const Profile profiles[TOTAL_PROFILES] = {
-    Profile{git_logo, "GIT", &GitFunc},
-    Profile{msvs_logo, "Microsoft\nVisual Studio", &GitFunc},
-    Profile{vscode_logo, "Visual Studio Code", &GitFunc},
+    Profile{IMAGE_(git_logo), "GIT", &GitFunc},
+    Profile{IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &GitFunc},
+    Profile{IMAGE_(vscode_logo), "Visual Studio Code", &GitFunc},
 };
 
 byte curProfile = 0;
@@ -83,10 +89,16 @@ void SwitchProfile()
 {
     curProfile = (curProfile + 1) % TOTAL_PROFILES;
     display.clearDisplay();
-    display.drawBitmap(
-        (display.width() - LOGO_WIDTH) / 2,
-        16,
-        profiles[curProfile].GetImage(), LOGO_WIDTH, LOGO_HEIGHT, 1);
+#if USE_IMAGES
+    auto image = profiles[curProfile].GetImage();
+    if (image)
+    {
+        display.drawBitmap(
+            (display.width() - LOGO_WIDTH) / 2,
+            16,
+            image, LOGO_WIDTH, LOGO_HEIGHT, 1);
+    }
+#endif
 
     display.setTextSize(1);              // Normal 1:1 pixel scale
     display.setTextColor(SSD1306_WHITE); // Draw white text
