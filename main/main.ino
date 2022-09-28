@@ -14,17 +14,17 @@
 #define SCREEN_ADDRESS 0x3C
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-const byte ROWS = 3;
-const byte COLS = 3;
+#define ROWS 3
+#define COLS 3
 
-char keys[ROWS][COLS] = {
+const char PROGMEM keys[ROWS][COLS] = {
     {'7', '8', '9'},
     {'4', '5', '6'},
     {'1', '2', '3'},
 };
 
-byte rowPins[ROWS] = {6, 5, 4};
-byte colPins[COLS] = {9, 8, 7};
+const byte PROGMEM rowPins[ROWS] = {6, 5, 4};
+const byte PROGMEM colPins[COLS] = {9, 8, 7};
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void GitFunc(char key)
@@ -70,14 +70,14 @@ void GitFunc(char key)
     }
 }
 
-const int TOTAL_PROFILES = 3;
+const byte TOTAL_PROFILES = 3;
 const Profile profiles[TOTAL_PROFILES] = {
     Profile{git_logo, "GIT", &GitFunc},
     Profile{msvs_logo, "Microsoft\nVisual Studio", &GitFunc},
     Profile{vscode_logo, "Visual Studio Code", &GitFunc},
 };
 
-int curProfile = 0;
+byte curProfile = 0;
 
 void SwitchProfile()
 {
@@ -98,21 +98,27 @@ void SwitchProfile()
     display.display();
 }
 
+//#define __DEBUG
+
 void setup()
 {
-
+#ifdef __DEBUG
     Serial.begin(9600); // initialize serial communication:
+#endif
 
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
     if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
     {
+#ifdef __DEBUG
         Serial.println(F("SSD1306 allocation failed"));
+#endif
         for (;;)
         {
         }; // Don't proceed, loop forever
     }
-
+#ifdef __DEBUG
     Serial.println(F("SSD1306 allocation good"));
+#endif
 
     Keyboard.begin();
     display.display();
@@ -127,7 +133,10 @@ void loop()
 
     if (key)
     {
+#ifdef __DEBUG
         Serial.println(key);
+#endif
+
         if (key == '7')
         {
             SwitchProfile();
