@@ -17,14 +17,14 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define ROWS 3
 #define COLS 3
 
-const char PROGMEM keys[ROWS][COLS] = {
+const char  keys[ROWS][COLS] = {
     {'7', '8', '9'},
     {'4', '5', '6'},
     {'1', '2', '3'},
 };
 
-const byte PROGMEM rowPins[ROWS] = {6, 5, 4};
-const byte PROGMEM colPins[COLS] = {9, 8, 7};
+const byte  rowPins[ROWS] = {6, 5, 4};
+const byte  colPins[COLS] = {9, 8, 7};
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void GitFunc(char key)
