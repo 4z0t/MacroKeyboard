@@ -1,6 +1,6 @@
 #define USE_IMAGES 1
-//removes adafruit splash for memory optimization
-#define SSD1306_NO_SPLASH 
+// removes adafruit splash for memory optimization
+#define SSD1306_NO_SPLASH
 #include "Profile.h"
 #if USE_IMAGES
 #include "images.h"
@@ -38,6 +38,42 @@ void GitFunc(char key)
     switch (key)
     {
     case '1':
+
+        break;
+    case '2':
+
+        break;
+    case '3':
+
+        break;
+    case '4':
+        Keyboard.println("git status");
+        break;
+    case '5':
+        Keyboard.println("Punch lox");
+        break;
+    case '6':
+        Keyboard.println("git diff");
+        break;
+        // case '7':
+        //  Keyboard.println("Alpha key7");
+        break;
+    case '8':
+        Keyboard.println("git log");
+        break;
+    case '9':
+
+        Keyboard.print("git commit -am \"\"");
+        Keyboard.press(KEY_LEFT_ARROW);
+        break;
+    }
+}
+
+void MSVSFunc(char key)
+{
+    switch (key)
+    {
+    case '1':
         // previous page
         Keyboard.press(KEY_LEFT_CTRL);
         Keyboard.print('-');
@@ -55,23 +91,59 @@ void GitFunc(char key)
         Keyboard.print('-');
         break;
     case '4':
-        Keyboard.println("git status");
+        // Keyboard.println("git status");
         break;
     case '5':
         Keyboard.println("Punch lox");
         break;
     case '6':
-        // Keyboard.println("Alpha key6");
+
         break;
         // case '7':
-        //  Keyboard.println("Alpha key7");
+
         break;
     case '8':
-        // Keyboard.println("Alpha key8");
+
         break;
     case '9':
 
-        Keyboard.println("Hello world!");
+        break;
+    }
+}
+
+void VSCodeFunc(char key)
+{
+    switch (key)
+    {
+    case '1':
+
+        break;
+    case '2':
+        // comment out
+        Keyboard.press(KEY_LEFT_ALT);
+        Keyboard.press(KEY_LEFT_SHIFT);
+        Keyboard.print('f');
+        break;
+    case '3':
+
+        break;
+    case '4':
+        // Keyboard.println("git status");
+        break;
+    case '5':
+        Keyboard.println("Punch lox");
+        break;
+    case '6':
+
+        break;
+        // case '7':
+
+        break;
+    case '8':
+
+        break;
+    case '9':
+
         break;
     }
 }
@@ -79,8 +151,8 @@ void GitFunc(char key)
 const byte TOTAL_PROFILES = 3;
 const Profile profiles[TOTAL_PROFILES] = {
     Profile{IMAGE_(git_logo), "GIT", &GitFunc},
-    Profile{IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &GitFunc},
-    Profile{IMAGE_(vscode_logo), "Visual Studio Code", &GitFunc},
+    Profile{IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc},
+    Profile{IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc},
 };
 
 byte curProfile = 0;
