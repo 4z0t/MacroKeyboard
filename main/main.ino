@@ -50,7 +50,7 @@ void GitFunc(char key)
         Keyboard.println("git status");
         break;
     case '5':
-        Keyboard.println("Punch lox");
+        Keyboard.print("git checkout ");
         break;
     case '6':
         Keyboard.println("git diff");
