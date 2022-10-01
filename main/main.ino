@@ -156,6 +156,8 @@ const Profile profiles[TOTAL_PROFILES] = {
 };
 
 byte curProfile = 0;
+byte prevP16 = 0;
+byte prevP10 = 0;
 
 void SwitchProfile()
 {
@@ -209,10 +211,14 @@ void setup()
     delay(2000); // Pause for 2 seconds
     display.clearDisplay();
     SwitchProfile();
+
+    pinMode(10, INPUT_PULLUP);
+    pinMode(16, INPUT_PULLUP);
 }
 
 void loop()
 {
+
     char key = keypad.getKey();
 
     if (key)
@@ -221,15 +227,26 @@ void loop()
         Serial.println(key);
 #endif
 
-        if (key == '7')
-        {
-            SwitchProfile();
-        }
-        else
-        {
-            profiles[curProfile].Call(key);
-        }
+        profiles[curProfile].Call(key);
+
         delay(100);
         Keyboard.releaseAll(); // this releases the buttons
+    }
+    else
+    {
+        byte p10 = digitalRead(10);
+        byte p16 = digitalRead(16);
+        if (p10 == 0 && p10 != prevP10)
+        {
+
+            SwitchProfile();
+        }
+        if (p16 == 0 && p16 != prevP16)
+        {
+
+            SwitchProfile();
+        }
+        prevP10 = p10;
+        prevP16 = p16;
     }
 }
