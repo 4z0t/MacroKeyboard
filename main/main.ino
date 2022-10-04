@@ -55,8 +55,8 @@ void GitFunc(char key)
     case '6':
         Keyboard.println("git diff");
         break;
-        // case '7':
-        //  Keyboard.println("Alpha key7");
+    case '7':
+
         break;
     case '8':
         Keyboard.println("git log");
@@ -74,7 +74,7 @@ void MSVSFunc(char key)
     switch (key)
     {
     case '1':
-        // previous page
+        // navigate backward
         Keyboard.press(KEY_LEFT_CTRL);
         Keyboard.print('-');
         break;
@@ -85,28 +85,38 @@ void MSVSFunc(char key)
         Keyboard.print('/');
         break;
     case '3':
-        // next page
+        // navigate forward
         Keyboard.press(KEY_LEFT_CTRL);
         Keyboard.press(KEY_LEFT_SHIFT);
         Keyboard.print('-');
         break;
     case '4':
-        // Keyboard.println("git status");
+        // go to left document
+        Keyboard.press(KEY_LEFT_CTRL);
+        Keyboard.press(KEY_LEFT_ALT);
+        Keyboard.press(KEY_PAGE_UP);
         break;
     case '5':
-        Keyboard.println("Punch lox");
+
         break;
     case '6':
-
+        // go to right document
+        Keyboard.press(KEY_LEFT_CTRL);
+        Keyboard.press(KEY_LEFT_ALT);
+        Keyboard.press(KEY_PAGE_DOWN);
         break;
-        // case '7':
-
+    case '7':
+        // step into
+        Keyboard.press(KEY_F11);
         break;
     case '8':
-
+        // step over
+        Keyboard.press(KEY_F10);
         break;
     case '9':
-
+        // step out
+        Keyboard.press(KEY_LEFT_SHIFT);
+        Keyboard.press(KEY_F11);
         break;
     }
 }
@@ -136,7 +146,7 @@ void VSCodeFunc(char key)
     case '6':
 
         break;
-        // case '7':
+    case '7':
 
         break;
     case '8':
