@@ -248,13 +248,13 @@ void loop()
         byte p16 = digitalRead(16);
         if (p10 == 0 && p10 != prevP10)
         {
-
             SwitchProfile();
+            delay(100);
         }
-        if (p16 == 0 && p16 != prevP16)
+        else if (p16 == 0 && p16 != prevP16)
         {
-
             SwitchProfile();
+            delay(100);
         }
         prevP10 = p10;
         prevP16 = p16;
