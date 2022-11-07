@@ -129,7 +129,7 @@ void VSCodeFunc(char key)
 
         break;
     case '2':
-        // comment out
+        // format file
         Keyboard.press(KEY_LEFT_ALT);
         Keyboard.press(KEY_LEFT_SHIFT);
         Keyboard.print('f');
@@ -169,9 +169,21 @@ byte curProfile = 0;
 byte prevP16 = 0;
 byte prevP10 = 0;
 
-void SwitchProfile()
+void NextProfile()
 {
     curProfile = (curProfile + 1) % TOTAL_PROFILES;
+}
+
+void PrevProfile()
+{
+    if (curProfile == 0)
+        curProfile = TOTAL_PROFILES - 1;
+    else
+        curProfile = (curProfile - 1);
+}
+
+void RedrawImage()
+{
     display.clearDisplay();
 #if USE_IMAGES
     auto image = profiles[curProfile].GetImage();
@@ -183,7 +195,6 @@ void SwitchProfile()
             image, LOGO_WIDTH, LOGO_HEIGHT, 1);
     }
 #endif
-
     display.setTextSize(1);              // Normal 1:1 pixel scale
     display.setTextColor(SSD1306_WHITE); // Draw white text
     display.cp437(true);                 // Use full 256 char 'Code Page 437' font
@@ -219,9 +230,7 @@ void setup()
     Keyboard.begin();
     display.display();
     delay(2000); // Pause for 2 seconds
-    display.clearDisplay();
-    SwitchProfile();
-
+    RedrawImage();
     pinMode(10, INPUT_PULLUP);
     pinMode(16, INPUT_PULLUP);
 }
@@ -248,12 +257,14 @@ void loop()
         byte p16 = digitalRead(16);
         if (p10 == 0 && p10 != prevP10)
         {
-            SwitchProfile();
+            NextProfile();
+            RedrawImage();
             delay(100);
         }
         else if (p16 == 0 && p16 != prevP16)
         {
-            SwitchProfile();
+            PrevProfile();
+            RedrawImage();
             delay(100);
         }
         prevP10 = p10;
