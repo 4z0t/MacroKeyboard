@@ -1,15 +1,16 @@
 
 class Profile
 {
-    typedef void (*FuncType)(char);
+    typedef void (*FuncType)(char, KeyState);
 
 private:
     const unsigned char *image;
     const char *name;
     const FuncType func;
+    const bool release;
 
 public:
-    Profile(const unsigned char *image, const char *name, FuncType func) : image(image), name(name), func(func){};
+    Profile(const unsigned char *image, const char *name, FuncType func, bool auto_release = true) : image(image), name(name), func(func), release(auto_release){};
     const unsigned char *GetImage() const
     {
         return image;
@@ -18,9 +19,10 @@ public:
     {
         return name;
     }
-    void Call(char c) const
+    bool Call(char c, KeyState state) const
     {
-        (*func)(c);
+        (*func)(c, state);
+        return release;
     }
     ~Profile(){};
 };

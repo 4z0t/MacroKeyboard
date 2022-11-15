@@ -1,6 +1,11 @@
 #define USE_IMAGES 1
 // removes adafruit splash for memory optimization
 #define SSD1306_NO_SPLASH
+
+#include <Adafruit_SSD1306.h>
+#include <Keyboard.h>
+#include <Keypad.h>
+#include <Wire.h>
 #include "Profile.h"
 #if USE_IMAGES
 #include "images.h"
@@ -8,10 +13,6 @@
 #else
 #define IMAGE_(image) nullptr
 #endif
-#include <Adafruit_SSD1306.h>
-#include <Keyboard.h>
-#include <Keypad.h>
-#include <Wire.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -33,7 +34,7 @@ const byte rowPins[ROWS] = {6, 5, 4};
 const byte colPins[COLS] = {9, 8, 7};
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
-void GitFunc(char key)
+void GitFunc(char key, KeyState state)
 {
     switch (key)
     {
@@ -69,7 +70,7 @@ void GitFunc(char key)
     }
 }
 
-void MSVSFunc(char key)
+void MSVSFunc(char key, KeyState state)
 {
     switch (key)
     {
@@ -121,7 +122,7 @@ void MSVSFunc(char key)
     }
 }
 
-void VSCodeFunc(char key)
+void VSCodeFunc(char key, KeyState state)
 {
     switch (key)
     {
@@ -238,18 +239,18 @@ void setup()
 void loop()
 {
 
-    char key = keypad.getKey();
-
-    if (key)
+    if (keypad.getKeys() && keypad.keyStateChanged())
     {
 #ifdef __DEBUG
         Serial.println(key);
 #endif
-
-        profiles[curProfile].Call(key);
+        char key = keypad.getKey();
+        KeyState state = keypad.getState();
+        bool release = profiles[curProfile].Call(key, state);
 
         delay(100);
-        Keyboard.releaseAll(); // this releases the buttons
+        if (release)
+            Keyboard.releaseAll(); // this releases the buttons
     }
     else
     {
@@ -257,12 +258,14 @@ void loop()
         byte p16 = digitalRead(16);
         if (p10 == 0 && p10 != prevP10)
         {
+            Keyboard.releaseAll();
             NextProfile();
             RedrawImage();
             delay(100);
         }
         else if (p16 == 0 && p16 != prevP16)
         {
+            Keyboard.releaseAll();
             PrevProfile();
             RedrawImage();
             delay(100);
