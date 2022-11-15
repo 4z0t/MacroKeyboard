@@ -36,132 +36,136 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 void GitFunc(char key, KeyState state)
 {
-    switch (key)
-    {
-    case '1':
+    if (state == PRESSED)
+        switch (key)
+        {
+        case '1':
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.press('v');
+            break;
+        case '2':
 
-        break;
-    case '2':
+            break;
+        case '3':
 
-        break;
-    case '3':
+            break;
+        case '4':
+            Keyboard.println("git status");
+            break;
+        case '5':
+            Keyboard.print("git checkout ");
+            break;
+        case '6':
+            Keyboard.println("git diff");
+            break;
+        case '7':
 
-        break;
-    case '4':
-        Keyboard.println("git status");
-        break;
-    case '5':
-        Keyboard.print("git checkout ");
-        break;
-    case '6':
-        Keyboard.println("git diff");
-        break;
-    case '7':
+            break;
+        case '8':
+            Keyboard.println("git log");
+            break;
+        case '9':
 
-        break;
-    case '8':
-        Keyboard.println("git log");
-        break;
-    case '9':
-
-        Keyboard.print("git commit -am \"\"");
-        Keyboard.press(KEY_LEFT_ARROW);
-        break;
-    }
+            Keyboard.print("git commit -am \"\"");
+            Keyboard.write(KEY_LEFT_ARROW);
+            break;
+        }
 }
 
 void MSVSFunc(char key, KeyState state)
 {
-    switch (key)
-    {
-    case '1':
-        // navigate backward
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.print('-');
-        break;
-    case '2':
-        // comment out
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.print('k');
-        Keyboard.print('/');
-        break;
-    case '3':
-        // navigate forward
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.press(KEY_LEFT_SHIFT);
-        Keyboard.print('-');
-        break;
-    case '4':
-        // go to left document
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.press(KEY_LEFT_ALT);
-        Keyboard.press(KEY_PAGE_UP);
-        break;
-    case '5':
+    if (state == PRESSED)
+        switch (key)
+        {
+        case '1':
+            // navigate backward
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.print('-');
+            break;
+        case '2':
+            // comment out
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.print('k');
+            Keyboard.print('/');
+            break;
+        case '3':
+            // navigate forward
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.press(KEY_LEFT_SHIFT);
+            Keyboard.print('-');
+            break;
+        case '4':
+            // go to left document
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.press(KEY_LEFT_ALT);
+            Keyboard.press(KEY_PAGE_UP);
+            break;
+        case '5':
 
-        break;
-    case '6':
-        // go to right document
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.press(KEY_LEFT_ALT);
-        Keyboard.press(KEY_PAGE_DOWN);
-        break;
-    case '7':
-        // step into
-        Keyboard.press(KEY_F11);
-        break;
-    case '8':
-        // step over
-        Keyboard.press(KEY_F10);
-        break;
-    case '9':
-        // step out
-        Keyboard.press(KEY_LEFT_SHIFT);
-        Keyboard.press(KEY_F11);
-        break;
-    }
+            break;
+        case '6':
+            // go to right document
+            Keyboard.press(KEY_LEFT_CTRL);
+            Keyboard.press(KEY_LEFT_ALT);
+            Keyboard.press(KEY_PAGE_DOWN);
+            break;
+        case '7':
+            // step into
+            Keyboard.press(KEY_F11);
+            break;
+        case '8':
+            // step over
+            Keyboard.press(KEY_F10);
+            break;
+        case '9':
+            // step out
+            Keyboard.press(KEY_LEFT_SHIFT);
+            Keyboard.press(KEY_F11);
+            break;
+        }
 }
 
 void VSCodeFunc(char key, KeyState state)
 {
-    switch (key)
-    {
-    case '1':
+    if (state == PRESSED)
+        switch (key)
+        {
+        case '1':
 
-        break;
-    case '2':
-        // format file
-        Keyboard.press(KEY_LEFT_ALT);
-        Keyboard.press(KEY_LEFT_SHIFT);
-        Keyboard.print('f');
-        break;
-    case '3':
+            break;
+        case '2':
+            // format file
+            Keyboard.press(KEY_LEFT_ALT);
+            Keyboard.press(KEY_LEFT_SHIFT);
+            Keyboard.print('f');
+            break;
+        case '3':
 
-        break;
-    case '4':
-        // Keyboard.println("git status");
-        break;
-    case '5':
-        Keyboard.println("Punch lox");
-        break;
-    case '6':
+            break;
+        case '4':
+            // Keyboard.println("git status");
+            break;
+        case '5':
+            Keyboard.println("Punch lox");
+            break;
+        case '6':
 
-        break;
-    case '7':
+            break;
+        case '7':
 
-        break;
-    case '8':
+            break;
+        case '8':
 
-        break;
-    case '9':
+            break;
+        case '9':
 
-        break;
-    }
+            break;
+        }
 }
 
 const byte TOTAL_PROFILES = 3;
 const Profile profiles[TOTAL_PROFILES] = {
-    Profile{IMAGE_(git_logo), "GIT", &GitFunc},
+    Profile{IMAGE_(git_logo), "GIT", &GitFunc, false},
     Profile{IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc},
     Profile{IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc},
 };
@@ -206,15 +210,16 @@ void RedrawImage()
     display.display();
 }
 
-//#define __DEBUG
+    //#define __DEBUG
 
-void setup()
+    void
+    setup()
 {
 #ifdef __DEBUG
     Serial.begin(9600); // initialize serial communication:
 #endif
 
-    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    // SSD1306_SWITCHCAVCC = generate display voltage from 3.3V internally
     if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
     {
 #ifdef __DEBUG
@@ -241,14 +246,16 @@ void loop()
 
     if (keypad.getKeys() && keypad.keyStateChanged())
     {
+
+        char key = keypad.getChar();
+        KeyState state = keypad.getState();
 #ifdef __DEBUG
         Serial.println(key);
+        Serial.println(state);
 #endif
-        char key = keypad.getKey();
-        KeyState state = keypad.getState();
         bool release = profiles[curProfile].Call(key, state);
 
-        delay(100);
+        delay(50);
         if (release)
             Keyboard.releaseAll(); // this releases the buttons
     }

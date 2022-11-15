@@ -22,7 +22,7 @@ public:
     bool Call(char c, KeyState state) const
     {
         (*func)(c, state);
-        return release;
+        return release || (state == RELEASED);
     }
     ~Profile(){};
 };
