@@ -19,6 +19,7 @@
 
 #define OLED_RESET -1
 #define SCREEN_ADDRESS 0x3C
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define ROWS 3
@@ -194,7 +195,7 @@ void UnrealEngineFunc(char key, KeyState state) {
 
 const byte TOTAL_PROFILES = 4;
 const Profile profiles[TOTAL_PROFILES] = {
-  Profile{ IMAGE_(git_logo), "GIT", &GitFunc, false },
+  Profile{ IMAGE_(git_logo), "GIT", &GitFunc, IMAGE_(git_icons), false },
   Profile{ IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc },
   Profile{ IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc },
   Profile{ IMAGE_(unreal_engine_logo), "Unreal Engine", &UnrealEngineFunc },
@@ -225,6 +226,26 @@ void RedrawImage() {
       16,
       image, LOGO_WIDTH, LOGO_HEIGHT, 1);
   }
+  auto icons = profiles[curProfile].GetIcons();
+  if (icons) {
+    for (unsigned char i = 0; i < 3; i++) {
+      for (unsigned char j = 0; j < 3; j++) {
+        auto icon = icons[i * 3 + j];
+        if (icon) {
+          display.drawBitmap(
+            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j,
+            16 + i * ICON_SIZE,
+            icon, ICON_SIZE, ICON_SIZE, 1);
+        } else {
+          display.drawPixel(
+            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j + ICON_SIZE / 2,
+            16 + i * ICON_SIZE + ICON_SIZE / 2,
+            1);
+        }
+      }
+    }
+  }
+
 #endif
   display.setTextSize(1);               // Normal 1:1 pixel scale
   display.setTextColor(SSD1306_WHITE);  // Draw white text
@@ -236,7 +257,7 @@ void RedrawImage() {
   display.display();
 }
 
-//#define __DEBUG
+// #define __DEBUG
 
 void setup() {
 #ifdef __DEBUG
