@@ -100,7 +100,8 @@ void MSVSFunc(char key, KeyState state) {
         Keyboard.press(KEY_PAGE_UP);
         break;
       case '5':
-
+        Keyboard.press(KEY_LEFT_ALT);
+        Keyboard.press(KEY_KP_ENTER);
         break;
       case '6':
         // go to right document
@@ -222,7 +223,7 @@ void RedrawImage() {
   auto image = profiles[curProfile].GetImage();
   if (image) {
     display.drawBitmap(
-      DRAW_AT_CENTER ? (display.width() - LOGO_WIDTH) / 2 : 0,
+      DRAW_AT_CENTER ? (display.width() - LOGO_WIDTH) / 2 : 8,
       16,
       image, LOGO_WIDTH, LOGO_HEIGHT, 1);
   }
@@ -230,15 +231,16 @@ void RedrawImage() {
   if (icons) {
     for (unsigned char i = 0; i < 3; i++) {
       for (unsigned char j = 0; j < 3; j++) {
-        const unsigned char * icon = icons[i * 3 + j];
+        const unsigned char* icon = icons[i * 3 + j];
+
         if (icon) {
           display.drawBitmap(
-            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j,
+            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j - 8,
             16 + i * ICON_SIZE,
             icon, ICON_SIZE, ICON_SIZE, 1);
         } else {
           display.drawPixel(
-            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j + ICON_SIZE / 2,
+            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j + ICON_SIZE / 2 - 8,
             16 + i * ICON_SIZE + ICON_SIZE / 2,
             1);
         }
