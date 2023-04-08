@@ -24,6 +24,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define ROWS 3
 #define COLS 3
 
+#define DRAW_AT_CENTER false
+
 const char keys[ROWS][COLS] = {
   { '7', '8', '9' },
   { '4', '5', '6' },
@@ -219,7 +221,7 @@ void RedrawImage() {
   auto image = profiles[curProfile].GetImage();
   if (image) {
     display.drawBitmap(
-      (display.width() - LOGO_WIDTH) / 2,
+      DRAW_AT_CENTER ? (display.width() - LOGO_WIDTH) / 2 : 0,
       16,
       image, LOGO_WIDTH, LOGO_HEIGHT, 1);
   }
