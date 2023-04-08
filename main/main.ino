@@ -196,7 +196,7 @@ void UnrealEngineFunc(char key, KeyState state) {
 const byte TOTAL_PROFILES = 4;
 const Profile profiles[TOTAL_PROFILES] = {
   Profile{ IMAGE_(git_logo), "GIT", &GitFunc, IMAGE_(git_icons), false },
-  Profile{ IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc },
+  Profile{ IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc, IMAGE_(msvs_icons) },
   Profile{ IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc },
   Profile{ IMAGE_(unreal_engine_logo), "Unreal Engine", &UnrealEngineFunc },
 };
@@ -226,11 +226,11 @@ void RedrawImage() {
       16,
       image, LOGO_WIDTH, LOGO_HEIGHT, 1);
   }
-  auto icons = profiles[curProfile].GetIcons();
+  IconGrid icons = profiles[curProfile].GetIcons();
   if (icons) {
     for (unsigned char i = 0; i < 3; i++) {
       for (unsigned char j = 0; j < 3; j++) {
-        auto icon = icons[i * 3 + j];
+        const unsigned char * icon = icons[i * 3 + j];
         if (icon) {
           display.drawBitmap(
             SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j,
