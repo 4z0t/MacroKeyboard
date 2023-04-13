@@ -41,8 +41,7 @@ void GitFunc(char key, KeyState state) {
   if (state == PRESSED)
     switch (key) {
       case '1':
-        Keyboard.press(KEY_LEFT_CTRL);
-        Keyboard.press('v');
+        Keyboard.print("git push ");
         break;
       case '2':
 
@@ -60,7 +59,7 @@ void GitFunc(char key, KeyState state) {
         Keyboard.println("git diff");
         break;
       case '7':
-
+        Keyboard.print("git restore ");
         break;
       case '8':
         Keyboard.println("git log");
@@ -194,12 +193,149 @@ void UnrealEngineFunc(char key, KeyState state) {
     }
 }
 
-const byte TOTAL_PROFILES = 4;
+void FunctionKeysFunc(char key, KeyState state) {
+  if (state == PRESSED)
+    switch (key) {
+      case '1':
+        Keyboard.press(KEY_F13);
+        break;
+      case '2':
+        Keyboard.press(KEY_F14);
+        break;
+      case '3':
+        Keyboard.press(KEY_F15);
+        break;
+      case '4':
+        Keyboard.press(KEY_F16);
+        break;
+      case '5':
+        Keyboard.press(KEY_F17);
+        break;
+      case '6':
+        Keyboard.press(KEY_F18);
+        break;
+      case '7':
+        Keyboard.press(KEY_F19);
+        break;
+      case '8':
+        Keyboard.press(KEY_F10);
+        break;
+      case '9':
+        Keyboard.press(KEY_F21);
+        break;
+    }
+}
+
+void PythonFunc(char key, KeyState state) {
+  if (state == PRESSED)
+    switch (key) {
+      case '1':
+        Keyboard.press(KEY_F13);
+        break;
+      case '2':
+        Keyboard.press(KEY_F14);
+        break;
+      case '3':
+        Keyboard.press(KEY_F15);
+        break;
+      case '4':
+        Keyboard.press(KEY_F16);
+        break;
+      case '5':
+        Keyboard.press(KEY_F17);
+        break;
+      case '6':
+        Keyboard.press(KEY_F18);
+        break;
+      case '7':
+        Keyboard.press(KEY_F19);
+        break;
+      case '8':
+        Keyboard.press(KEY_F10);
+        break;
+      case '9':
+        Keyboard.press(KEY_F21);
+        break;
+    }
+}
+
+void WASDFunc(char key, KeyState state) {
+  if (state == PRESSED)
+    switch (key) {
+      case '1':
+        Keyboard.press(KEY_F13);
+        break;
+      case '2':
+        Keyboard.press(KEY_F14);
+        break;
+      case '3':
+        Keyboard.press(' ');
+        break;
+      case '4':
+        Keyboard.press('a');
+        break;
+      case '5':
+        Keyboard.press('s');
+        break;
+      case '6':
+        Keyboard.press('d');
+        break;
+      case '7':
+        Keyboard.press(KEY_F19);
+        break;
+      case '8':
+        Keyboard.press('w');
+        break;
+      case '9':
+        Keyboard.press(KEY_F21);
+        break;
+    }
+}
+
+void DockerFunc(char key, KeyState state) {
+  if (state == PRESSED)
+    switch (key) {
+      case '1':
+        Keyboard.print("docker compose ");
+        break;
+      case '2':
+
+        break;
+      case '3':
+
+        break;
+      case '4':
+
+        break;
+      case '5':
+
+        break;
+      case '6':
+
+        break;
+      case '7':
+
+        break;
+      case '8':
+
+        break;
+      case '9':
+
+        break;
+    }
+}
+
+const byte TOTAL_PROFILES = 7;
 const Profile profiles[TOTAL_PROFILES] = {
-  Profile{ IMAGE_(git_logo), "GIT", &GitFunc, IMAGE_(git_icons), false },
-  Profile{ IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc, IMAGE_(msvs_icons) },
-  Profile{ IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc },
-  Profile{ IMAGE_(unreal_engine_logo), "Unreal Engine", &UnrealEngineFunc },
+  { IMAGE_(git_logo), "GIT", &GitFunc, IMAGE_(git_icons), false },
+  { IMAGE_(msvs_logo), "Microsoft\nVisual Studio", &MSVSFunc, IMAGE_(msvs_icons) },
+  { IMAGE_(vscode_logo), "Visual Studio Code", &VSCodeFunc },
+  { IMAGE_(python_logo), "Python", &PythonFunc },
+  { IMAGE_(unreal_engine_logo), "Unreal Engine", &UnrealEngineFunc },
+  { IMAGE_(func_keys_logo), "Functional keys", &FunctionKeysFunc },
+  { IMAGE_(docker_logo), "Docker", &DockerFunc },
+
+  //{ IMAGE_(wasd_logo), "WASD", &WASDFunc, nullptr, false }
 };
 
 byte curProfile = 0;
@@ -228,23 +364,23 @@ void RedrawImage() {
       image, LOGO_WIDTH, LOGO_HEIGHT, 1);
   }
   IconGrid icons = profiles[curProfile].GetIcons();
-  if (icons) {
-    for (unsigned char i = 0; i < 3; i++) {
-      for (unsigned char j = 0; j < 3; j++) {
-        const unsigned char* icon = icons[i * 3 + j];
+  for (unsigned char i = 0; i < ROWS; i++) {
+    for (unsigned char j = 0; j < COLS; j++) {
+      if (icons) {
+        const unsigned char* icon = icons[i * ROWS + j];
 
         if (icon) {
           display.drawBitmap(
             SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j - 8,
             16 + i * ICON_SIZE,
             icon, ICON_SIZE, ICON_SIZE, 1);
-        } else {
-          display.drawPixel(
-            SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j + ICON_SIZE / 2 - 8,
-            16 + i * ICON_SIZE + ICON_SIZE / 2,
-            1);
+          continue;
         }
       }
+      display.drawPixel(
+        SCREEN_WIDTH - LOGO_WIDTH + ICON_SIZE * j + ICON_SIZE / 2 - 8,
+        16 + i * ICON_SIZE + ICON_SIZE / 2,
+        1);
     }
   }
 
@@ -299,8 +435,8 @@ void loop() {
     bool release = profiles[curProfile].Call(key, state);
 
     delay(50);
-    if (release)
-      Keyboard.releaseAll();  // this releases the buttons
+    if (release) Keyboard.releaseAll();  // this releases the buttons
+
   } else {
     byte p10 = digitalRead(10);
     byte p16 = digitalRead(16);
